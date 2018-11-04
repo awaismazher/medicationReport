@@ -36,6 +36,7 @@ import {
 import { getSettingsItem } from '../../../../utils/storageUtils';
 import { weightConverter, getUnitEnum } from '../../../../shared/components/settings/settingsUtil';
 import { YY_MM_DD } from '../../../sources/Constants';
+import CustomModal from './Modal'
 
 // let tabs;
 let medButton;
@@ -53,9 +54,9 @@ class MedicationReport extends Component {
     this.state = {
       loggedInUserId:
         this.props &&
-        this.props.location &&
-        this.props.location.state &&
-        this.props.location.state.loggedInUserId
+          this.props.location &&
+          this.props.location.state &&
+          this.props.location.state.loggedInUserId
           ? this.props.location.state.loggedInUserId
           : '',
       note: '',
@@ -105,10 +106,10 @@ class MedicationReport extends Component {
     noteAttached = false;
     const stateRole =
       this.props &&
-      this.props.location &&
-      this.props.location.state &&
-      this.props.location.state.role &&
-      this.props.location.state.role
+        this.props.location &&
+        this.props.location.state &&
+        this.props.location.state.role &&
+        this.props.location.state.role
         ? this.props.location.state.role
         : store.getState().auth.userDetails.roles[0];
 
@@ -174,8 +175,8 @@ class MedicationReport extends Component {
             : null;
         const suggestedBGLRanges =
           this.props.location &&
-          this.props.location.state &&
-          this.props.location.state.suggestedBGLRanges
+            this.props.location.state &&
+            this.props.location.state.suggestedBGLRanges
             ? this.props.location.state.suggestedBGLRanges
             : null;
         const loggedInUserRole = store.getState().auth.userDetails.roles[0];
@@ -204,8 +205,8 @@ class MedicationReport extends Component {
         GetSingleReport(this.props.location.state.reportId, res => {
           const activeTab =
             !isEmpty(res) &&
-            !isEmpty(res.suggestedMedication) &&
-            !isEmpty(res.suggestedMedication.medications)
+              !isEmpty(res.suggestedMedication) &&
+              !isEmpty(res.suggestedMedication.medications)
               ? 1
               : 2;
           const activeTab1 =
@@ -250,8 +251,8 @@ class MedicationReport extends Component {
                   res.assignedToTypeId === 1
                     ? 'ROLE_DOCTOR'
                     : res.assignedToTypeId === 2
-                    ? 'ROLE_EDUCATOR'
-                    : 'ROLE_DIETICIAN',
+                      ? 'ROLE_EDUCATOR'
+                      : 'ROLE_DIETICIAN',
               });
               this.setState({ createdByName: res.createdByName });
               this.setState({ createdByRole: res.createdByRole });
@@ -398,16 +399,16 @@ class MedicationReport extends Component {
       } else {
         let activeTab =
           this.props.location &&
-          this.props.location.state &&
-          this.props.location.state.finalData &&
-          !isEmpty(this.props.location.state.finalData.medications)
+            this.props.location.state &&
+            this.props.location.state.finalData &&
+            !isEmpty(this.props.location.state.finalData.medications)
             ? 1
             : 2;
         let activeTab1 =
           this.props.location &&
-          this.props.location.state &&
-          this.props.location.state.suggestedBGLRanges &&
-          !isEmpty(this.props.location.state.suggestedBGLRanges.bglRanges)
+            this.props.location.state &&
+            this.props.location.state.suggestedBGLRanges &&
+            !isEmpty(this.props.location.state.suggestedBGLRanges.bglRanges)
             ? 1
             : 2;
         if (activeTab === 1)
@@ -426,8 +427,8 @@ class MedicationReport extends Component {
         const loggedInUserRole = store.getState().auth.userDetails.roles[0];
         const suggestedBGLRanges =
           this.props.location &&
-          this.props.location.state &&
-          this.props.location.state.suggestedBGLRanges
+            this.props.location.state &&
+            this.props.location.state.suggestedBGLRanges
             ? this.props.location.state.suggestedBGLRanges
             : null;
 
@@ -622,8 +623,8 @@ class MedicationReport extends Component {
     if (!(reportId && reportId !== null && reportId !== '')) {
       const selectedReportHCP =
         this.props.location &&
-        this.props.location.state &&
-        this.props.location.state.selectedReportHCP
+          this.props.location.state &&
+          this.props.location.state.selectedReportHCP
           ? this.props.location.state.selectedReportHCP
           : '';
       this.setState({
@@ -674,11 +675,11 @@ class MedicationReport extends Component {
     );
   };
 
-  toggle = () => {
+  toggle() {
     this.setState({
       modal: !this.state.modal,
     });
-  };
+  }
 
   toggleWarningMessage = () => {
     this.setState({
@@ -686,11 +687,11 @@ class MedicationReport extends Component {
     });
   };
 
-  toggleWarningMessageOnCancel = () => {
+  toggleWarningMessageOnCancel() {
     this.setState({
       showWarningMessageOnCancel: !this.state.showWarningMessageOnCancel,
     });
-  };
+  }
 
   messageTime = () => {
     let date = new Date();
@@ -939,8 +940,8 @@ class MedicationReport extends Component {
                 if (err === null) {
                   const reportId =
                     this.props.location &&
-                    this.props.location.state &&
-                    this.props.location.state.reportId
+                      this.props.location.state &&
+                      this.props.location.state.reportId
                       ? this.props.location.state.reportId
                       : '';
                   if (reportId) {
@@ -1066,8 +1067,8 @@ class MedicationReport extends Component {
           this.props.location.state && this.props.location.state.finalData
             ? this.props.location.state.finalData
             : this.state.reportData && this.state.reportData.suggestedMedication
-            ? this.state.reportData.suggestedMedication
-            : '',
+              ? this.state.reportData.suggestedMedication
+              : '',
         role,
         currentData,
         educatorName,
@@ -1110,8 +1111,8 @@ class MedicationReport extends Component {
           this.props.location.state && this.props.location.state.suggestedBGLRanges
             ? this.props.location.state.suggestedBGLRanges
             : this.state.reportData && this.state.reportData.suggestedBgl
-            ? this.state.reportData.suggestedBgl
-            : '',
+              ? this.state.reportData.suggestedBgl
+              : '',
         role,
         currentData,
         educatorName,
@@ -1126,11 +1127,11 @@ class MedicationReport extends Component {
           this.props.location.state && this.props.location.state.finalData
             ? this.props.location.state.finalData
             : this.state.reportData && this.state.reportData.suggestedMedication
-            ? {
-              medications: this.state.reportData.suggestedMedication.medications,
-              patientId: this.state.reportData.patientId,
-            }
-            : '',
+              ? {
+                medications: this.state.reportData.suggestedMedication.medications,
+                patientId: this.state.reportData.patientId,
+              }
+              : '',
         noteData: payloadForFullReport.reportNotes ? payloadForFullReport.reportNotes : [],
         reportName,
       },
@@ -1528,8 +1529,8 @@ class MedicationReport extends Component {
               if (err === null) {
                 const reportId =
                   this.props.location &&
-                  this.props.location.state &&
-                  this.props.location.state.reportId
+                    this.props.location.state &&
+                    this.props.location.state.reportId
                     ? this.props.location.state.reportId
                     : '';
                 if (reportId) {
@@ -1862,8 +1863,8 @@ class MedicationReport extends Component {
         this.state.value === 'DOCTOR'
           ? this.props.location.state.doctorName
           : this.state.value === 'DIETITIAN'
-          ? this.props.location.state.dieticianName
-          : '';
+            ? this.props.location.state.dieticianName
+            : '';
     }
     // This condition is to handle case for back redirection state setting for dietician and doctor checkbox
     if (
@@ -1883,10 +1884,10 @@ class MedicationReport extends Component {
       this.props.location.state && this.props.location.state.finalData
         ? this.props.location.state.finalData
         : suggestedMedication
-        ? suggestedMedication
-        : reportData.suggestedMedication
-          ? reportData.suggestedMedication
-          : null;
+          ? suggestedMedication
+          : reportData.suggestedMedication
+            ? reportData.suggestedMedication
+            : null;
     console.log('SUGGSTED MEDICATIONS')
     console.log(suggestedMedication);
     let currentData;
@@ -1904,8 +1905,8 @@ class MedicationReport extends Component {
         suggestedMedication && suggestedMedication.medications
           ? suggestedMedication.medications
           : this.state.responseData
-          ? this.state.responseData[0]
-          : [];
+            ? this.state.responseData[0]
+            : [];
     } else {
       currentData = this.state.responseData[0];
     }
@@ -1990,10 +1991,10 @@ class MedicationReport extends Component {
       this.props.location.state && this.props.location.state.suggestedBGLRanges
         ? this.props.location.state.suggestedBGLRanges
         : reportData.suggestedBgl
-        ? reportData.suggestedBgl
-        : this.props.location.state
-          ? this.props.location.state.suggestedBGLRanges
-          : null;
+          ? reportData.suggestedBgl
+          : this.props.location.state
+            ? this.props.location.state.suggestedBGLRanges
+            : null;
     if (role !== 'ROLE_DOCTOR') {
       currentMonitoring =
         this.state.patientRanges &&
@@ -2182,7 +2183,7 @@ class MedicationReport extends Component {
                       res => {
                         this.editMedication(
                           this.props.location.state &&
-                          this.props.location.state.currentPatientDetails
+                            this.props.location.state.currentPatientDetails
                             ? this.props.location.state.currentPatientDetails.fullName
                             : '',
                           this.props.match.params.id,
@@ -2335,9 +2336,9 @@ class MedicationReport extends Component {
               onClick={() => {
                 this.viewMedication(
                   this.props &&
-                  this.props.location &&
-                  this.props.location.state &&
-                  this.props.location.state.reportId
+                    this.props.location &&
+                    this.props.location.state &&
+                    this.props.location.state.reportId
                     ? this.props.location.state.reportId
                     : '',
                   this.props.match.params.id,
@@ -2366,9 +2367,9 @@ class MedicationReport extends Component {
               onClick={() => {
                 this.viewMonitoring(
                   this.props &&
-                  this.props.location &&
-                  this.props.location.state &&
-                  this.props.location.state.reportId
+                    this.props.location &&
+                    this.props.location.state &&
+                    this.props.location.state.reportId
                     ? this.props.location.state.reportId
                     : '',
                   this.props.match.params.id,
@@ -2461,6 +2462,10 @@ class MedicationReport extends Component {
       }
       return '';
     }
+    const educatorName = this.props.location && this.props.location.state &&
+                    this.props.location.state.educatorName
+                    ? this.props.location.state.educatorName
+                    : ''
 
     return (
       <I18n ns="translations">
@@ -2472,11 +2477,11 @@ class MedicationReport extends Component {
                 message={t('CHANGES_WILL_NOT_BE_SAVED_REPORT_EDUCATOR', { name: sendToName })}
               />
             ) : (
-              <Prompt
-                when={this.state.showPrompt && !this.state.editButtonClicked}
-                message={t('CHANGES_WILL_NOT_BE_SAVED_REPORT_DOCTOR', { name: sendToName })}
-              />
-            )}
+                <Prompt
+                  when={this.state.showPrompt && !this.state.editButtonClicked}
+                  message={t('CHANGES_WILL_NOT_BE_SAVED_REPORT_DOCTOR', { name: sendToName })}
+                />
+              )}
             <div className="bg-light">
               <div className="px-lg-4">
                 <nav aria-label="breadcrumb" className="pt-3">
@@ -2506,24 +2511,24 @@ class MedicationReport extends Component {
                             {this.getReportTitle(currentPatientDetails, role, t)}
                           </h1>
                           {this.state.reportLocked &&
-                          this.state.reportData.lockedById &&
-                          this.state.reportData.lockedById !== this.state.loggedInUserId ? (
-                            <Fragment>
-                              {' '}
-                              <small className="text-danger">
-                                {t('REPORT_LOCKED_MSG', {
-                                  name: this.state.reportData.lockedByName,
-                                })}
-                              </small>{' '}
-                              <i
-                                style={{ color: 'red' }}
-                                className="fa fa-exclamation-circle"
-                                aria-hidden="true"
-                              />{' '}
-                            </Fragment>
-                          ) : (
-                            undefined
-                          )}
+                            this.state.reportData.lockedById &&
+                            this.state.reportData.lockedById !== this.state.loggedInUserId ? (
+                              <Fragment>
+                                {' '}
+                                <small className="text-danger">
+                                  {t('REPORT_LOCKED_MSG', {
+                                    name: this.state.reportData.lockedByName,
+                                  })}
+                                </small>{' '}
+                                <i
+                                  style={{ color: 'red' }}
+                                  className="fa fa-exclamation-circle"
+                                  aria-hidden="true"
+                                />{' '}
+                              </Fragment>
+                            ) : (
+                              undefined
+                            )}
                         </div>
                       </div>
                     </div>
@@ -2577,8 +2582,8 @@ class MedicationReport extends Component {
                                 <span className="mx-2">|</span>{' '}
                               </Fragment>
                             ) : (
-                              undefined
-                            )}
+                                undefined
+                              )}
                             {t('COMPLICATION')}{' '}
                             {currentPatientDetails.hasComplication ? t('YES') : t('NO')}
                           </small>
@@ -2630,73 +2635,73 @@ class MedicationReport extends Component {
                             </div>
                           </div>
                         ) : (
-                          undefined
-                        )}
+                            undefined
+                          )}
                         <div className="row py-2">
                           <div className="col-4 col-md-3">
                             <span>
                               {this.state &&
-                              this.state.createdByRole &&
-                              this.state.createdByRole !== role
+                                this.state.createdByRole &&
+                                this.state.createdByRole !== role
                                 ? t('FROM')
                                 : t('TO')}
                               :
                             </span>
                           </div>
                           {this.props.location &&
-                          this.props.location.state &&
-                          this.props.location.state.from === 'dashboard' &&
-                          role === 'ROLE_EDUCATOR' ? (
-                            <div className="col-8 col-md-6">
-                              <div className="custom-control custom-radio custom-control-inline">
-                                <input
-                                  className="form-check-input custom-control-input"
-                                  type="radio"
-                                  id="option1"
-                                  name="recepientRadio"
-                                  value="DOCTOR"
-                                  onChange={this.setRecepient.bind(this, 1)}
-                                  checked={this.state.value === 'DOCTOR'}
-                                />
-                                <label
-                                  className="form-check-label m-0 custom-control-label"
-                                  htmlFor="option1"
-                                >
-                                  {t('DOCTOR')}
-                                </label>
-                              </div>
+                            this.props.location.state &&
+                            this.props.location.state.from === 'dashboard' &&
+                            role === 'ROLE_EDUCATOR' ? (
+                              <div className="col-8 col-md-6">
+                                <div className="custom-control custom-radio custom-control-inline">
+                                  <input
+                                    className="form-check-input custom-control-input"
+                                    type="radio"
+                                    id="option1"
+                                    name="recepientRadio"
+                                    value="DOCTOR"
+                                    onChange={this.setRecepient.bind(this, 1)}
+                                    checked={this.state.value === 'DOCTOR'}
+                                  />
+                                  <label
+                                    className="form-check-label m-0 custom-control-label"
+                                    htmlFor="option1"
+                                  >
+                                    {t('DOCTOR')}
+                                  </label>
+                                </div>
 
-                              <div className="custom-control custom-radio custom-control-inline">
-                                <input
-                                  className="form-check-input custom-control-input"
-                                  type="radio"
-                                  name="recepientRadio"
-                                  id="option2"
-                                  value="DIETITIAN"
-                                  onChange={this.setRecepient.bind(this, 3)}
-                                  checked={this.state.value === 'DIETITIAN'}
-                                />
-                                <label
-                                  className="form-check-label m-0 custom-control-label"
-                                  htmlFor="option2"
-                                >
-                                  {t('DIETITIAN')}
-                                </label>
+                                <div className="custom-control custom-radio custom-control-inline">
+                                  <input
+                                    className="form-check-input custom-control-input"
+                                    type="radio"
+                                    name="recepientRadio"
+                                    id="option2"
+                                    value="DIETITIAN"
+                                    onChange={this.setRecepient.bind(this, 3)}
+                                    checked={this.state.value === 'DIETITIAN'}
+                                  />
+                                  <label
+                                    className="form-check-label m-0 custom-control-label"
+                                    htmlFor="option2"
+                                  >
+                                    {t('DIETITIAN')}
+                                  </label>
+                                </div>
                               </div>
-                            </div>
-                          ) : (
-                            <div className="col-8 col-md-9">
+                            ) : (
+                              <div className="col-8 col-md-9">
                                 <span className="text-primary">
                                   {this.state &&
-                                  this.state.createdByRole &&
-                                  this.state.createdByRole === 'ROLE_DOCTOR' &&
-                                  role === 'ROLE_DOCTOR'
+                                    this.state.createdByRole &&
+                                    this.state.createdByRole === 'ROLE_DOCTOR' &&
+                                    role === 'ROLE_DOCTOR'
                                     ? ''
                                     : ''}
 
                                   {this.state &&
-                                  this.state.createdByRole &&
-                                  this.state.createdByRole !== role
+                                    this.state.createdByRole &&
+                                    this.state.createdByRole !== role
                                     ? this.state && this.state.createdByName
                                       ? `${this.state.createdByName} - ${getRole(
                                         this.state.createdByRole,
@@ -2706,8 +2711,8 @@ class MedicationReport extends Component {
                                       ? `${this.state.assignedToName} - ${assignedToRole}`
                                       : `${sendToName} - ${assignedToRole}`}
                                 </span>
-                            </div>
-                          )}
+                              </div>
+                            )}
                         </div>
                         {reportData && reportData.reportNotes
                           ? reportData.reportNotes.map(element => (
@@ -2716,7 +2721,7 @@ class MedicationReport extends Component {
                                 <div className="col-4 col-md-3">
                                   <span>
                                     {this.state.loggedInUserId &&
-                                    this.state.loggedInUserId == element.createdById
+                                      this.state.loggedInUserId == element.createdById
                                       ? t('ME')
                                       : element.createdByName}
                                     :
@@ -2782,558 +2787,263 @@ class MedicationReport extends Component {
                   <div className="col-auto">
                     <p className="h5 medication-h5">{t('MEDICATION')}</p>
                   </div>
-                  {/* <div className={activeTab === 1 && suggestedMedication ? 'tab-pane fade show active d-flex flex-nowrap ovx-a ovy-h' : 'tab-pane fade hide'}>
-                   {contentSuggested}
-                   </div>
-                   <div className={activeTab === 2 || (activeTab === 1 && !suggestedMedication) ? 'tab-pane fade show active d-flex flex-nowrap ovx-a ovy-h' : 'tab-pane fade hide'}>
-                   {content}
-                   <div className="col-12">
-                   <p className="text-muted mt-3 mb-0" />
-                   </div>
-                   </div> */}
                   <div className="col-auto">{medButton}</div>
                 </div>
                 <hr className="mb-md-4" />
-                <div className="row mb-5">
-                  <div className="col">
-                    <div className="card border rounded">
-                      <div className="card-header text-primary pb-0 pt-2">
-                        <div className="col px-0">
-                          <ul
-                            className="nav nav-tabs border-bottom-0 flex-nowrap w-100 ovy-h ovx-a"
-                            id="myTab"
-                            role="tablist"
-                          >
-                            {this.tabs &&
-                            this.tabs.map(tab => {
-                              const className =
-                                tab.id === activeTab ||
-                                ((tab.id === 2 && activeTab === 1 && !suggestedMedication) ||
-                                  (this.state.reportExists &&
-                                    this.state.snapshotReport &&
-                                    tab.id === 2))
-                                  ? 'nav-link active'
-                                  : 'nav-link text-muted';
-                              // if (tab.id === 2 || (tab.id === 3 && previousData) || tab.id === 1 && suggestedMedication && suggestedMedication.medications && suggestedMedication.medications.length > 0 && suggestedMedication.medications[0].medicineId && suggestedMedication.medications[0].medicineId !== null) {
-                              if (
-                                tab.id === 2 ||
-                                (tab.id === 3 && previousData) ||
-                                (tab.id === 1 &&
-                                  suggestedMedication &&
-                                  suggestedMedication.medications &&
-                                  suggestedMedication.medications.length >= 0)
-                              ) {
-                                const tabClass =
-                                  !reportId &&
-                                  store.getState().auth.userDetails.roles[0] === 'ROLE_DOCTOR' &&
-                                  tab.id === 1
-                                    ? 'nav-item text-nowrap d-none'
-                                    : 'nav-item text-nowrap';
-                                return (
-                                  <li className={tabClass} key={tab.id}>
-                                    <a
-                                      className={className}
-                                      data-toggle="tab"
-                                      role="tab"
-                                      aria-selected="true"
-                                      onClick={event => {
-                                        this.setState({ activeTab: tab.id });
-                                      }}
-                                    >
-                                      {t(tab.text)}
-                                    </a>
-                                  </li>
-                                );
-                              } else {
-                                null;
-                              }
-                            })}
-                          </ul>
-                        </div>
+                <Tabs 
+                  tabs={this.tabs}
+                  reportExists={this.state.reportExists}
+                  snapshotReport={this.state.snapshotReport}
+                  suggestedMedication={suggestedMedication}
+                  reportId={reportId}
+                  contentSuggested={contentSuggested}
+                  NoteInCard={NoteInCard}
+                  content={content}
+                  previousData={previousData}
+                  contentPrevious={contentPrevious}
+                  currentStatus={currentStatus(t)}
+                />
+                {currentPatientDetails.typeOfDiabetes === 'NO_DIABETIC' ||
+                  currentPatientDetails.typeOfDiabetes === 'PRE_DIABETIC' ? (
+                    ''
+                  ) : (
+                    <div className="row justify-content-between align-items-end">
+                      <div className="col-auto">
+                        <p className="h5 medication-h5">{t('MONITORING')}</p>
                       </div>
-                      {!reportId &&
-                      store.getState().auth.userDetails.roles[0] === 'ROLE_DOCTOR' ? null : (
-                        <div
-                          style={{ height: '165px' }}
-                          className={
-                            activeTab === 1 && suggestedMedication && !this.state.snapshotReport
-                              ? 'tab-pane fade show active d-md-flex flex-md-nowrap ovx-a'
-                              : 'tab-pane fade hide'
-                          }
-                        >
-                          {contentSuggested}
-                          {!contentSuggested && (
-                            <div className="col-12">
-                              <p className="text-muted mt-3 mb-0">{NoteInCard}</p>
+                      <div className="col-auto">{bglEdit}</div>
+                    </div>
+                  )}
+                {currentPatientDetails.typeOfDiabetes === 'NO_DIABETIC' ||
+                  currentPatientDetails.typeOfDiabetes === 'PRE_DIABETIC' ? (
+                    ''
+                  ) : (
+                    <hr className="mb-md-4" />
+                  )}
+                {currentPatientDetails.typeOfDiabetes === 'NO_DIABETIC' ||
+                  currentPatientDetails.typeOfDiabetes === 'PRE_DIABETIC' ? (
+                    ''
+                  ) : (
+                    <div className="row mb-5">
+                      <div className="col">
+                        <div className="card rounded border">
+                          <div className="card-header text-primary pb-0 pt-2">
+                            <div className="col px-0">
+                              <ul
+                                className="nav nav-tabs border-bottom-0 w-100 ovy-h ovx-a flex-nowrap"
+                                id="myTab"
+                                role="tablist"
+                              >
+                                {this.tabs1 &&
+                                  this.tabs1.map(tab => {
+                                    const className =
+                                      tab.id === activeTab1 ||
+                                        ((tab.id === 2 && activeTab1 === 1 && !suggestedBGLRanges) ||
+                                          (this.state.reportExists &&
+                                            this.state.snapshotReport &&
+                                            tab.id === 2))
+                                        ? 'nav-link active'
+                                        : 'nav-link text-muted';
+                                    if (
+                                      tab.id === 2 ||
+                                      (tab.id === 3 && previousMonitoring) ||
+                                      (tab.id === 1 &&
+                                        suggestedBGLRanges &&
+                                        suggestedBGLRanges.bglRanges &&
+                                        suggestedBGLRanges.bglRanges.length)
+                                    ) {
+                                      const tabClass =
+                                        !reportId &&
+                                          store.getState().auth.userDetails.roles[0] ===
+                                          'ROLE_DOCTOR' &&
+                                          tab.id === 1
+                                          ? 'nav-item text-nowrap d-none'
+                                          : 'nav-item text-nowrap';
+                                      return (
+                                        <li className={tabClass} key={tab.id}>
+                                          <a
+                                            className={className}
+                                            data-toggle="tab"
+                                            role="tab"
+                                            aria-selected="true"
+                                            onClick={event => {
+                                              this.setState({ activeTab1: tab.id });
+                                            }}
+                                          >
+                                            {t(tab.text)}
+                                          </a>
+                                        </li>
+                                      );
+                                    } else {
+                                      null;
+                                    }
+                                  })}
+                              </ul>
                             </div>
-                          )}
-                        </div>
-                      )}
-
-                      <div
-                        style={{ height: '165px' }}
-                        className={
-                          activeTab === 2 ||
-                          (activeTab === 1 && !suggestedMedication) ||
-                          this.state.snapshotReport
-                            ? 'tab-pane fade show active d-md-flex flex-md-nowrap ovx-a'
-                            : 'tab-pane fade hide'
-                        }
-                      >
-                        {content}
-                        {!content && (
-                          <div className="col-12">
-                            <p className="text-muted mt-3 mb-0" />
                           </div>
-                        )}
-                      </div>
-                      {previousData && (
-                        <div
-                          style={{ height: '165px' }}
-                          className={
-                            activeTab === 3
-                              ? 'tab-pane fade show active d-md-flex flex-md-nowrap ovx-a'
-                              : 'tab-pane fade hide'
-                          }
-                        >
-                          {contentPrevious}
-                          {!contentPrevious && (
-                            <div className="col-12">
-                              <p className="text-muted mt-3 mb-0" />
-                            </div>
-                          )}
-                        </div>
-                      )}
-                      <div className="card-footer bg-white text-right">
-                        {currentStatus(t)}
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                {currentPatientDetails.typeOfDiabetes === 'NO_DIABETIC' ||
-                currentPatientDetails.typeOfDiabetes === 'PRE_DIABETIC' ? (
-                  ''
-                ) : (
-                  <div className="row justify-content-between align-items-end">
-                    <div className="col-auto">
-                      <p className="h5 medication-h5">{t('MONITORING')}</p>
-                    </div>
-                    <div className="col-auto">{bglEdit}</div>
-                  </div>
-                )}
-                {currentPatientDetails.typeOfDiabetes === 'NO_DIABETIC' ||
-                currentPatientDetails.typeOfDiabetes === 'PRE_DIABETIC' ? (
-                  ''
-                ) : (
-                  <hr className="mb-md-4" />
-                )}
-                {currentPatientDetails.typeOfDiabetes === 'NO_DIABETIC' ||
-                currentPatientDetails.typeOfDiabetes === 'PRE_DIABETIC' ? (
-                  ''
-                ) : (
-                  <div className="row mb-5">
-                    <div className="col">
-                      <div className="card rounded border">
-                        <div className="card-header text-primary pb-0 pt-2">
-                          <div className="col px-0">
-                            <ul
-                              className="nav nav-tabs border-bottom-0 w-100 ovy-h ovx-a flex-nowrap"
-                              id="myTab"
-                              role="tablist"
-                            >
-                              {this.tabs1 &&
-                              this.tabs1.map(tab => {
-                                const className =
-                                  tab.id === activeTab1 ||
-                                  ((tab.id === 2 && activeTab1 === 1 && !suggestedBGLRanges) ||
-                                    (this.state.reportExists &&
-                                      this.state.snapshotReport &&
-                                      tab.id === 2))
-                                    ? 'nav-link active'
-                                    : 'nav-link text-muted';
-                                if (
-                                  tab.id === 2 ||
-                                  (tab.id === 3 && previousMonitoring) ||
-                                  (tab.id === 1 &&
-                                    suggestedBGLRanges &&
-                                    suggestedBGLRanges.bglRanges &&
-                                    suggestedBGLRanges.bglRanges.length)
-                                ) {
-                                  const tabClass =
-                                    !reportId &&
-                                    store.getState().auth.userDetails.roles[0] ===
-                                    'ROLE_DOCTOR' &&
-                                    tab.id === 1
-                                      ? 'nav-item text-nowrap d-none'
-                                      : 'nav-item text-nowrap';
-                                  return (
-                                    <li className={tabClass} key={tab.id}>
-                                      <a
-                                        className={className}
-                                        data-toggle="tab"
-                                        role="tab"
-                                        aria-selected="true"
-                                        onClick={event => {
-                                          this.setState({ activeTab1: tab.id });
-                                        }}
-                                      >
-                                        {t(tab.text)}
-                                      </a>
-                                    </li>
-                                  );
-                                } else {
-                                  null;
+                          {!reportId &&
+                            store.getState().auth.userDetails.roles[0] === 'ROLE_DOCTOR' ? null : (
+                              <div
+                                style={{ height: '145px' }}
+                                className={
+                                  activeTab1 === 1 && suggestedBGLRanges && !this.state.snapshotReport
+                                    ? 'tab-pane fade show active d-md-flex flex-md-nowrap ovx-a'
+                                    : 'tab-pane fade hide'
                                 }
-                              })}
-                            </ul>
-                          </div>
-                        </div>
-                        {!reportId &&
-                        store.getState().auth.userDetails.roles[0] === 'ROLE_DOCTOR' ? null : (
+                              >
+                                {contentSuggestedMonitoring}
+                                {!contentSuggestedMonitoring && (
+                                  <div className="col-12">
+                                    <p className="text-muted mt-3 mb-0">{NoteInCard}</p>
+                                  </div>
+                                )}
+                              </div>
+                            )}
+
                           <div
                             style={{ height: '145px' }}
                             className={
-                              activeTab1 === 1 && suggestedBGLRanges && !this.state.snapshotReport
+                              activeTab1 === 2 ||
+                                (activeTab1 === 1 && !suggestedBGLRanges) ||
+                                (this.state.reportExists && this.state.snapshotReport)
                                 ? 'tab-pane fade show active d-md-flex flex-md-nowrap ovx-a'
                                 : 'tab-pane fade hide'
                             }
                           >
-                            {contentSuggestedMonitoring}
-                            {!contentSuggestedMonitoring && (
+                            {contentMonitoring}
+                            {!contentMonitoring && (
                               <div className="col-12">
-                                <p className="text-muted mt-3 mb-0">{NoteInCard}</p>
+                                <p className="text-muted mt-3 mb-0" />
                               </div>
                             )}
                           </div>
-                        )}
-
-                        <div
-                          style={{ height: '145px' }}
-                          className={
-                            activeTab1 === 2 ||
-                            (activeTab1 === 1 && !suggestedBGLRanges) ||
-                            (this.state.reportExists && this.state.snapshotReport)
-                              ? 'tab-pane fade show active d-md-flex flex-md-nowrap ovx-a'
-                              : 'tab-pane fade hide'
-                          }
-                        >
-                          {contentMonitoring}
-                          {!contentMonitoring && (
-                            <div className="col-12">
-                              <p className="text-muted mt-3 mb-0" />
-                            </div>
-                          )}
-                        </div>
-                        {previousMonitoring && (
-                          <div
-                            style={{ height: '145px' }}
-                            className={
-                              activeTab1 === 3
-                                ? 'tab-pane fade show active d-md-flex flex-md-nowrap ovx-a'
-                                : 'tab-pane fade hide'
-                            }
-                          >
-                            {contentPreviousMonitoring}
-                            {/* {!previousMonitoring && <div className="col-12">
+                          {previousMonitoring && (
+                            <div
+                              style={{ height: '145px' }}
+                              className={
+                                activeTab1 === 3
+                                  ? 'tab-pane fade show active d-md-flex flex-md-nowrap ovx-a'
+                                  : 'tab-pane fade hide'
+                              }
+                            >
+                              {contentPreviousMonitoring}
+                              {/* {!previousMonitoring && <div className="col-12">
                                            <p className="text-muted mt-3 mb-0" />
                                            </div> */}
-                          </div>
-                        )}
+                            </div>
+                          )}
 
-                        <div className="card-footer bg-white text-right">
-                          {activeTab1 === 1 && !this.state.snapshotReport
-                            ? this.getStatusTextForMonitoring(reportData, t)
-                            : activeTab1 === 2 || this.state.snapshotReport
-                              ? this.getStatusTextForCurrentPrevious(currentMonitoring, t)
-                              : this.getStatusTextForCurrentPrevious(previousMonitoring, t)}
+                          <div className="card-footer bg-white text-right">
+                            {activeTab1 === 1 && !this.state.snapshotReport
+                              ? this.getStatusTextForMonitoring(reportData, t)
+                              : activeTab1 === 2 || this.state.snapshotReport
+                                ? this.getStatusTextForCurrentPrevious(currentMonitoring, t)
+                                : this.getStatusTextForCurrentPrevious(previousMonitoring, t)}
+                          </div>
                         </div>
                       </div>
                     </div>
-                  </div>
-                )}
-                <Modal
-                  isOpen={this.state.modal}
-                  toggle={this.toggle}
-                  backdrop={this.state.backdrop}
-                  className="dr-modal"
-                >
-                  <ModalHeader>
-                    <Icon type="check-circle" />
-                    <h5>{t('ARE_YOU_SURE?')}</h5>
-                  </ModalHeader>
-                  <ModalBody>
-                    <div className="row">
-                      <div className={`col ml-auto ${config.textDirection}`}>
-                        <p className="my-3">
-                          {t('THE_REPORT_WILL_BE_SENT_TO')}
-                          {this.state &&
-                          this.state.createdByRole &&
-                          this.state.createdByRole === 'ROLE_DOCTOR' &&
-                          role === 'ROLE_DOCTOR'
-                            ? ''
-                            : ''}{' '}
-                          {this.state && this.state.assignedToName
-                            ? this.state.assignedToName
-                            : sendToName}
-                        </p>
-                      </div>
-                    </div>
-                  </ModalBody>
-                  <ModalFooter>
-                    <button
-                      className={`btn btn-white border px-3 ${config.btnMargin}`}
-                      onClick={this.toggle}
-                    >
-                      {t('CANCEL')}
-                    </button>
-                    <button
-                      disabled={this.state.isSendLoading}
-                      className="btn btn-primary px-3"
-                      onClick={this.sendToDoctor}
-                      style={{ width: '25%' }}
-                    >
-                      {this.state.isSendLoading && (
-                        <span>
-                          <i
-                            className="fa fa-circle-o-notch fa-spin"
-                            style={{ marginRight: '10px' }}
-                          />{' '}
-                        </span>
-                      )}
-                      {t('SEND')}
-                    </button>{' '}
-                  </ModalFooter>
-                </Modal>
-                <Modal
-                  isOpen={this.state.showWarningMessage}
-                  toggle={this.toggleWarningMessage}
-                  backdrop={this.state.backdrop}
-                  className="dr-modal"
-                >
-                  <ModalHeader>
-                    <Icon type="check-circle" />
-                    <h5>{t('ARE_YOU_SURE?')}</h5>
-                  </ModalHeader>
-                  <ModalBody>
-                    <div className="row">
-                      <div className={`col ml-auto ${config.textDirection}`}>
-                        <p className="my-3">{t('REJECT_REPORT_MSG')}</p>
+                  )}
+                <CustomModal
+                  textDirection={config.textDirection}
+                  btnMargin={config.btnMargin}
+                  footerCancel = {t('CANCEL')}
+                  footerOkLoading={this.state.isSendLoading}
+                  footerOk={t('SEND')}
+                  footerOkClick={this.sendToDoctor}
+                  modalBody={() => (<p className="my-3">
+                  {t('THE_REPORT_WILL_BE_SENT_TO')}
+                  {this.state.assignedToName
+                    ? this.state.assignedToName
+                    : sendToName}
+                </p>)}
+                />
+                <CustomModal
+                  textDirection={config.textDirection}
+                  btnMargin={config.btnMargin}
+                  footerCancel = {t('CANCEL')}
+                  footerOkLoading={this.state.isSendLoading}
+                  footerOk={t('OK')}
+                  footerOkClick={this.updateReportStatus(reportId, 10, this.props.match.params.id)}
+                  modalBody={() => {
+                    return(
+                    <>
+                      <p className="my-3">{t('REJECT_REPORT_MSG')}</p>
                         <p>
                           {isEnglishLanguageCode(lang)
                             ? t('REJECT_REPORT_DETAIL_MSG').replace(
                               '[Name]',
-                              this.props.location &&
-                              this.props.location.state &&
-                              this.props.location.state.educatorName
-                                ? this.props.location.state.educatorName
-                                : '',
+                                educatorName
                             )
                             : t('REJECT_REPORT_DETAIL_MSG').replace(
                               '[الاسم]',
-                              this.props.location &&
-                              this.props.location.state &&
-                              this.props.location.state.educatorName
-                                ? this.props.location.state.educatorName
-                                : '',
+                              educatorName,
                             )}
                         </p>
-                      </div>
-                    </div>
-                  </ModalBody>
-                  <ModalFooter>
-                    <button
-                      className={`btn btn-white border px-3  ${config.btnMargin}`}
-                      onClick={this.toggleWarningMessage}
-                    >
-                      {t('CANCEL')}
-                    </button>
-                    <button
-                      disabled={this.state.isSendLoading}
-                      className="btn btn-primary px-3"
-                      onClick={this.updateReportStatus(reportId, 10, this.props.match.params.id)}
-                      style={{ width: '25%' }}
-                    >
-                      {this.state.isSendLoading && (
-                        <span>
-                          <i
-                            className="fa fa-circle-o-notch fa-spin"
-                            style={{ marginRight: '10px' }}
-                          />{' '}
-                        </span>
-                      )}
-                      {t('OK')}
-                    </button>{' '}
-                  </ModalFooter>
-                </Modal>
-
-                {/* APPROVE DOCTOR REPORT MODAL */}
-                <Modal
-                  isOpen={this.state.showApprovePopup}
-                  toggle={this.toggleApprovePopup}
-                  backdrop={this.state.backdrop}
-                  className="dr-modal"
-                >
-                  <ModalHeader>
-                    <Icon type="check-circle" />
-                    <h5>{t('ARE_YOU_SURE?')}</h5>
-                  </ModalHeader>
-                  <ModalBody>
-                    <div className="row">
-                      <div className={`col ml-auto ${config.textDirection}`}>
-                        <p className="my-3">{t('APPROVE_REPORT_MSG')}</p>
+                    </>
+                  )}}
+                />
+                <CustomModal
+                  textDirection={config.textDirection}
+                  btnMargin={config.btnMargin}
+                  footerCancel = {t('CANCEL')}
+                  footerOkLoading={this.state.isSendLoading}
+                  footerOk={t('OK')}
+                  footerOkClick={this.updateReportStatus(reportId, 9, this.props.match.params.id)}
+                  modalBody={() => {
+                    return(
+                    <>
+                      <p className="my-3">{t('APPROVE_REPORT_MSG')}</p>
                         <p>
                           {isEnglishLanguageCode(lang)
                             ? t('APPROVE_REPORT_DETAIL_MSG').replace(
                               '[Name]',
-                              this.props.location &&
-                              this.props.location.state &&
-                              this.props.location.state.educatorName
-                                ? this.props.location.state.educatorName
-                                : '',
+                                educatorName
                             )
                             : t('APPROVE_REPORT_DETAIL_MSG').replace(
-                              'الاسم',
-                              this.props.location &&
-                              this.props.location.state &&
-                              this.props.location.state.educatorName
-                                ? this.props.location.state.educatorName
-                                : '',
+                              '[الاسم]',
+                              educatorName,
                             )}
                         </p>
-                      </div>
-                    </div>
-                  </ModalBody>
-                  <ModalFooter>
-                    <button
-                      className={`btn btn-white border px-3  ${config.btnMargin}`}
-                      onClick={this.toggleApprovePopup}
-                    >
-                      {t('CANCEL')}
-                    </button>
-                    <button
-                      disabled={this.state.isSendLoading}
-                      className="btn btn-primary px-3"
-                      onClick={this.updateReportStatus(reportId, 9, this.props.match.params.id)}
-                      style={{ width: '25%' }}
-                    >
-                      {this.state.isSendLoading && (
-                        <span>
-                          <i
-                            className="fa fa-circle-o-notch fa-spin"
-                            style={{ marginRight: '10px' }}
-                          />{' '}
-                        </span>
-                      )}
-                      {t('OK')}
-                    </button>{' '}
-                  </ModalFooter>
-                </Modal>
-
-                {/* CREATE DOCTOR REPORT MODAL */}
-                <Modal
-                  isOpen={this.state.showCreatePopup}
-                  toggle={this.toggleCreatePopup}
-                  backdrop={this.state.backdrop}
-                  className="dr-modal"
-                >
-                  <ModalHeader>
-                    <Icon type="check-circle" />
-                    <h5>{t('ARE_YOU_SURE?')}</h5>
-                  </ModalHeader>
-                  <ModalBody>
-                    <div className="row">
-                      <div className={`col ml-auto ${config.textDirection}`}>
-                        {/* <p className="my-3">{t('APPROVE_REPORT_MSG')}</p> */}
+                    </>
+                  )}}
+                />
+                <CustomModal
+                  textDirection={config.textDirection}
+                  btnMargin={config.btnMargin}
+                  footerCancel = {t('CANCEL')}
+                  footerOkLoading={this.state.isSendLoading}
+                  footerOk={t('OK')}
+                  footerOkClick={this.sendToDoctor}
+                  modalBody={() => (
                         <p>
                           {isEnglishLanguageCode(lang)
                             ? t('SEND_REPORT_MSG').replace(
-                              '[Recipient 1]',
-                              this.props.location &&
-                              this.props.location.state &&
-                              this.props.location.state.educatorName
-                                ? this.props.location.state.educatorName
-                                : '',
+                              '[Name]',
+                                educatorName
                             )
                             : t('SEND_REPORT_MSG').replace(
-                              'مستلم',
-                              this.props.location &&
-                              this.props.location.state &&
-                              this.props.location.state.educatorName
-                                ? this.props.location.state.educatorName
-                                : '',
+                              '[الاسم]',
+                              educatorName,
                             )}
                         </p>
-                      </div>
-                    </div>
-                  </ModalBody>
-                  <ModalFooter>
-                    <button
-                      className={`btn btn-white border px-3  ${config.btnMargin}`}
-                      onClick={this.toggleCreatePopup}
-                    >
-                      {t('CANCEL')}
-                    </button>
-                    <button
-                      disabled={this.state.isSendLoading}
-                      className="btn btn-primary px-3"
-                      onClick={this.sendToDoctor}
-                      style={{ width: '25%' }}
-                    >
-                      {this.state.isSendLoading && (
-                        <span>
-                          <i
-                            className="fa fa-circle-o-notch fa-spin"
-                            style={{ marginRight: '10px' }}
-                          />{' '}
-                        </span>
-                      )}
-                      {t('OK')}
-                    </button>{' '}
-                  </ModalFooter>
-                </Modal>
-
-                <Modal
-                  isOpen={this.state.showWarningMessageOnCancel}
-                  toggle={this.toggleWarningMessageOnCancel}
-                  backdrop={this.state.backdrop}
-                >
-                  <ModalHeader>
-                    <div className="row align-items-center">
-                      <div className="col-1">
-                        <i className="fa fa-check-circle text-primary" />
-                      </div>
-                      <div className="col">
-                        <h5 className="m-0">{t('ARE_YOU_SURE?')}</h5>
-                      </div>
-                    </div>
-                  </ModalHeader>
-                  <ModalBody>
-                    <div className="row">
-                      <div className={`col ml-auto ${config.textDirection}`}>
-                        <p className="my-3">
-                          {role === 'ROLE_DOCTOR'
-                            ? t('CHANGES_WILL_NOT_BE_SAVED_REPORT_EDUCATOR', { name: sendToName })
-                            : t('CHANGES_WILL_NOT_BE_SAVED_REPORT_DOCTOR', { name: sendToName })}
-                        </p>
-                      </div>
-                    </div>
-                  </ModalBody>
-                  <ModalFooter>
-                    <button
-                      className={`btn btn-white border px-3  ${config.btnMargin}`}
-                      onClick={this.toggleWarningMessageOnCancel}
-                    >
-                      {t('CANCEL')}
-                    </button>
-                    <button
-                      className="btn btn-primary px-3"
-                      onClick={() => this.leave(this.props.match.params.id)}
-                      style={{ width: '25%' }}
-                    >
-                      {t('LEAVE_PAGE')}
-                    </button>{' '}
-                  </ModalFooter>
-                </Modal>
+                  )}
+                />
+                <CustomModal
+                  textDirection={config.textDirection}
+                  btnMargin={config.btnMargin}
+                  footerCancel = {t('CANCEL')}
+                  footerOkLoading={this.state.isSendLoading}
+                  footerOk={t('LEAVE_PAGE')}
+                  footerOkClick={() => this.leave(this.props.match.params.id)}
+                  modalBody={() => (
+                    <p className="my-3">
+                    {role === 'ROLE_DOCTOR'
+                      ? t('CHANGES_WILL_NOT_BE_SAVED_REPORT_EDUCATOR', { name: sendToName })
+                      : t('CHANGES_WILL_NOT_BE_SAVED_REPORT_DOCTOR', { name: sendToName })}
+                  </p>
+                  )}
+                />
 
                 <hr />
                 <div className="row justify-content-between">
