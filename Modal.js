@@ -1,32 +1,12 @@
 import React from 'react';
 
-export default class Modal extends React.Component{
-    constructor(props) {
-        super(props);
-        this.state={
-            open: false
-        }
-    }
-    toggle = () => {
-        this.setState(prevState => ({
-            open: !prevState.open
-        }))
-    }
-    render() {
-    const {
-        textDirection,
-        btnMargin,
-        footerCancel,
-        footerOkLoading,
-        footerOk,
-        footerOkClick,
-        modalBody
-    } = this.props;
-    const { open } = this.state;
+// TODO: Based on the use case default props and props types can be managed with class properties.
+export default const Modal = ( {textDirection, btnMargin, footerCancel, footerOkLoading, footerOk,
+  footerOkClick, modalBody, isOpen, onToggle}){
     return(
         <Modal
-            isOpen={open}
-            toggle={this.toggle}
+            isOpen={isOpen}
+            toggle={onToggle}
             backdrop={'static'}
             className="dr-modal"
         >
@@ -67,5 +47,4 @@ export default class Modal extends React.Component{
             </ModalFooter>
         </Modal>
     )
-    }
 }

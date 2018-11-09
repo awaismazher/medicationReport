@@ -14,6 +14,7 @@ import {
   CompleteReportPatch,
   MarkReportAsApproved,
 } from '../../../sources/PatientMedication';
+import get from 'lodash/get';
 import BGLMedicationReport from './BGLMedicationReport';
 import MedicationData from './MedicationData/MedicationData';
 import BGLPlanComponent from '../../PatientDashboard/BGLPlan/BGLPlanComponent';
@@ -52,13 +53,7 @@ class MedicationReport extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      loggedInUserId:
-        this.props &&
-          this.props.location &&
-          this.props.location.state &&
-          this.props.location.state.loggedInUserId
-          ? this.props.location.state.loggedInUserId
-          : '',
+      loggedInUserId: get(props, 'location.state.loggedInUserId', ''),
       note: '',
       note1: '',
       displayNotes: [],
@@ -96,8 +91,6 @@ class MedicationReport extends Component {
       showCreatePopup: false,
       isSendLoading: false,
     };
-    this.toggle = this.toggle.bind(this);
-    this.toggleWarningMessageOnCancel = this.toggleWarningMessageOnCancel.bind(this);
   }
 
   componentDidMount() {
@@ -675,40 +668,21 @@ class MedicationReport extends Component {
     );
   };
 
-  toggle() {
-    this.setState({
-      modal: !this.state.modal,
-    });
-  }
-
-  toggleWarningMessage = () => {
-    this.setState({
-      showWarningMessage: !this.state.showWarningMessage,
-    });
+  toggle = () => {
+    this.setState(prevState => ({ modal: !prevState.modal }));
   };
 
-  toggleWarningMessageOnCancel() {
-    this.setState({
-      showWarningMessageOnCancel: !this.state.showWarningMessageOnCancel,
-    });
+  toggleWarningMessage = () => {
+    this.setState(prevState => ({ showWarningMessage: !prevState.showWarningMessage }));
+  };
+
+  toggleWarningMessageOnCancel = () => {
+    this.setState(prevState => ({ showWarningMessageOnCancel: !prevState.showWarningMessageOnCancel }));
   }
 
   messageTime = () => {
     let date = new Date();
-    let monthNames = [
-      'January',
-      'February',
-      'March',
-      'April',
-      'May',
-      'June',
-      'July',
-      'August',
-      'September',
-      'October',
-      'November',
-      'December',
-    ];
+    // Removed monthNames, unused field
     let strTime = `${formatDate(date)} at ${moment(date).format('h:mm a')}`;
     return strTime;
   };
@@ -725,41 +699,25 @@ class MedicationReport extends Component {
       if (res.length >= 100) {
         return;
       }
+      // TODO: I'm wonder that is this  updated state call back usefull, it doesn't make any sense,
+      // setting up some variables(sentToId,noteAttached)  and that's it.
       this.setState({ note: event.target.value, sendNoteButtonClicked: false }, () => {
-        // const note = this.state.note1 === '' ? event.target.value : this.state.note1;
-
-        const role = this.props.location.state.role;
-        if (role === 'ROLE_EDUCATOR') {
-          sentToId = this.props.location.state.doctorSentToId;
-        } else if (role === 'ROLE_DOCTOR') {
-          sentToId = this.props.location.state.educatorSentToId;
-        } else if (role === 'ROLE_DIETICIAN') {
-          sentToId = this.props.location.state.doctorSentToId;
-        }
+        const role = get(this.props, 'location.state.role');
+        this.setRole(role);
         noteAttached = true;
-        // payloadForNote = {
-        //   reportNotes:
-        //     [
-        //       {
-        //         noteBody: this.state.note, noteType: 2, patientId, sentToId, title: 'REPORT_TITLE',
-        //       },
-        //     ],
-        // };
-
-        // payloadForFullReport.reportNotes = payloadForNote.reportNotes;
       });
     }
   };
 
   sendMessage = e => {
     e.preventDefault();
-    if (this.state.note !== '') {
-      this.setState(
-        () => ({
+    const { note } = this.state;
+    if (note !== '') {
+      this.setState({
           note: '',
-          note1: this.state.note,
+          note1: note,
           sendNoteButtonClicked: true,
-        }),
+        },
         () => {
           this.sendMessagePartCallBack();
         },
@@ -769,39 +727,18 @@ class MedicationReport extends Component {
 
   sendMessagePartCallBack = () => {
     const { note1 } = this.state;
-    const patientId = this.props.match.params.id;
-    const { role } = this.props.location.state;
-    if (role === 'ROLE_EDUCATOR') {
-      sentToId = this.props.location.state.doctorSentToId;
-    } else if (role === 'ROLE_DOCTOR') {
-      sentToId = this.props.location.state.educatorSentToId;
-    } else if (role === 'ROLE_DIETICIAN') {
-      sentToId = this.props.location.state.doctorSentToId;
-    }
-    if (payloadForNote) {
-      if (payloadForNote.reportNotes) {
-        payloadForNote.reportNotes.push({
-          noteBody: note1,
-          noteType: 2,
-          patientId,
-          sentToId,
-          title: 'REPORT_TITLE',
-          messageTime: this.messageTime(),
-        });
-      } else {
-        payloadForNote = {
-          reportNotes: [
-            {
-              noteBody: note1,
-              noteType: 2,
-              patientId,
-              sentToId,
-              title: 'REPORT_TITLE',
-              messageTime: this.messageTime(),
-            },
-          ],
-        };
-      }
+    const patientId = get(this.props, 'match.params.id');
+    const { role } = get(this.props, 'location.state);
+    this.setRole(role);
+    if (payloadForNote && payloadForNote.reportNotes) {
+      payloadForNote.reportNotes.push({
+        noteBody: note1,
+        noteType: 2,
+        patientId,
+        sentToId,
+        title: 'REPORT_TITLE',
+        messageTime: this.messageTime(),
+      });
     } else {
       payloadForNote = {
         reportNotes: [
@@ -820,15 +757,12 @@ class MedicationReport extends Component {
     this.setState({
       displayNotes: payloadForFullReport.reportNotes,
     });
-    // payloadForFullReport.reportNotes.push({ noteBody: note1, noteType: 2, patientId, sentToId, title: 'REPORT_TITLE'});
+    // TODO: Not getting the Usecase, but did some cleaning.
     if (note1) {
       noteAttached = true;
       this.props.form.validateFields(err => {
         if (err === null) {
-          const reportId =
-            this.props.location && this.props.location.state && this.props.location.state.reportId
-              ? this.props.location.state.reportId
-              : '';
+          const reportId = get(this.props, 'location.state.reportId', '');
           // if (this.props.match && this.props.match.params && this.props.match.params.id) {
           if (reportId) {
             const newNote = {
@@ -860,7 +794,18 @@ class MedicationReport extends Component {
     }
   };
 
+  setRole = (role) => {
+    if (role === 'ROLE_EDUCATOR') {
+      sentToId = get(this.props, 'location.state.doctorSentToId');
+    } else if (role === 'ROLE_DOCTOR') {
+      sentToId = get(this.props, 'location.state.educatorSentToId');
+    } else if (role === 'ROLE_DIETICIAN') {
+      sentToId = get(this.props, 'location.state.doctorSentToId');
+    }
+  }
   sendToDoctor = e => {
+    // TODO: In this function, state & props destructuring is needs to be implement,
+    // and same as I did above, 'get' method of loadash should be used rather then directly getting childs
     this.setState({ showPrompt: false, isSendLoading: true }, () => {
       const { role, reportId } =
         this.props && this.props.location && this.props.location.state
@@ -1085,22 +1030,9 @@ class MedicationReport extends Component {
       },
     });
   };
-
-  editMonitoring = (
-    currentPatientName,
-    id,
-    currentData,
-    role,
-    educatorName,
-    doctorName,
-    doctorSentToId,
-    educatorSentToId,
-    dieticianSentToId,
-    reportId,
-    currentPatientDetails,
-    finalData,
-    reportName,
-  ) => {
+  // TODO: Agian 'get' should be used on multpile places.
+  editMonitoring = (currentPatientName, id, currentData, role, educatorName, doctorName, doctorSentToId,
+                    educatorSentToId, dieticianSentToId, reportId, currentPatientDetails, finalData, reportName,) => {
     this.props.history.push({
       pathname: `/bgl-edit/${id}/edit`,
       state: {
@@ -1138,14 +1070,7 @@ class MedicationReport extends Component {
     });
   };
 
-  viewMonitoring = (
-    reportId,
-    id,
-    role,
-    currentPatientName,
-    currentPatientDetails,
-    assignedToTypeId,
-  ) => {
+  viewMonitoring = (reportId, id, role, currentPatientName, currentPatientDetails, assignedToTypeId,) => {
     this.props.history.push({
       pathname: `/bgl-plan/${id}`,
       state: {
@@ -1162,14 +1087,7 @@ class MedicationReport extends Component {
     });
   };
 
-  viewMedication = (
-    reportId,
-    id,
-    role,
-    currentPatientName,
-    currentPatientDetails,
-    assignedToTypeId,
-  ) => {
+  viewMedication = (reportId, id, role, currentPatientName, currentPatientDetails, assignedToTypeId,) => {
     this.props.history.push({
       pathname: `/medication/${id}`,
       state: {
@@ -1186,17 +1104,8 @@ class MedicationReport extends Component {
   };
 
   cancel = id => {
-    if (
-      this.props.location.state &&
-      this.props.location.state.comingFrom &&
-      this.props.location.state.comingFrom === 'edit-medication'
-    ) {
-      this.toggleWarningMessageOnCancel();
-    } else if (
-      this.props.location.state &&
-      this.props.location.state.comingFrom &&
-      this.props.location.state.comingFrom === 'edit-monitoring'
-    ) {
+    const comingFrom = get(this.props, 'location.state.comingFrom', '');
+    if ( comingFrom === 'edit-medication' || comingFrom === 'edit-monitoring') {
       this.toggleWarningMessageOnCancel();
     } else {
       this.props.history.push({
@@ -1206,7 +1115,8 @@ class MedicationReport extends Component {
   };
 
   leave = id => {
-    if (this.state.showWarningMessageOnCancel) {
+    const {showWarningMessageOnCancel} = this.state;
+    if (showWarningMessageOnCancel) {
       this.setState(
         {
           showPrompt: false,
@@ -1220,6 +1130,7 @@ class MedicationReport extends Component {
     }
   };
 
+  // TODO: 'get' implementation required and if/else cleaning.
   getStatusTextForCurrentPrevious = (responseData, t) => {
     const statusText = '';
     if (responseData) {
@@ -1277,6 +1188,7 @@ class MedicationReport extends Component {
     return statusText;
   };
 
+  // TODO: 'get' implementation required and if/else cleaning.
   getStatusTextForMedication = (reportData, t) => {
     const statusText = '';
     let prefix = '';
@@ -1368,6 +1280,8 @@ class MedicationReport extends Component {
     return statusText;
   };
 
+  // TODO: 'get' implementation required and if/else cleaning.
+  // and much similarties with 'getStatusTextForMedication' function
   getStatusTextForMonitoring = (reportData, t) => {
     const statusText = '';
     let prefix = '';
@@ -1459,6 +1373,7 @@ class MedicationReport extends Component {
     return statusText;
   };
 
+  // TODO: 'get' implementation required and if/else cleaning.
   updateReportStatus = (reportId, status, patientId) => env => {
     this.setState(
       { doctorApprovedOrRejected: true, showPrompt: false, isSendLoading: true },
@@ -1623,17 +1538,14 @@ class MedicationReport extends Component {
   };
 
   toggleApprovePopup = () => {
-    this.setState({
-      showApprovePopup: !this.state.showApprovePopup,
-    });
+    this.setState(prevState => ({ showApprovePopup: !prevState.showApprovePopup }));
   };
 
   toggleCreatePopup = () => {
-    this.setState({
-      showCreatePopup: !this.state.showCreatePopup,
-    });
+    this.setState(prevState => ({ showCreatePopup: !prevState.showCreatePopup }));
   };
 
+  // 'get' needs to be used.
   markReportAsRead = event => {
     const patientId = this.props.match.params.id;
     const reportId =
@@ -1754,6 +1666,7 @@ class MedicationReport extends Component {
   render() {
     const { params } = this.props.match;
     const lang = localStorage.getItem('i18nextLng');
+    // TODO: Configs should always been separate, not in render().
     const config = {
       textMargin: 'ml-3',
       btnDirection: 'float-right',
@@ -1764,7 +1677,6 @@ class MedicationReport extends Component {
       buttonPadding: 'pl-0',
       iconPadding: 'pr-2',
     };
-
     if (isArabicLanguageCode(lang)) {
       config.textMargin = 'mr-3';
       config.btnDirection = 'float-left';
@@ -1776,19 +1688,8 @@ class MedicationReport extends Component {
       config.iconPadding = 'pl-2';
     }
     let currentPatientDetails;
-    if (
-      this.props &&
-      this.props.location &&
-      this.props.location.state &&
-      this.props.location.state.currentPatientDetails
-    ) {
-      if (
-        this.props &&
-        this.props.location &&
-        this.props.location.state &&
-        this.props.location.state.currentPatientDetails &&
-        this.props.location.state.currentPatientDetails.state &&
-        this.props.location.state.currentPatientDetails.state.currentPatientDetails) {
+    if (get(this.props, 'location.state.currentPatientDetails')) {
+      if (get(this.props, 'location.state.currentPatientDetails.state.currentPatientDetails')) {
         currentPatientDetails = this.props.location.state.currentPatientDetails.state.currentPatientDetails;
       } else {
         currentPatientDetails = this.props.location.state.currentPatientDetails;
@@ -1829,49 +1730,34 @@ class MedicationReport extends Component {
       };
     }
     let currentPatientName;
-    if (
-      this.props.location &&
-      this.props.location.state &&
-      this.props.location.state.currentPatientName
-    ) {
-      currentPatientName =
-        this.props.location.state && this.props.location.state.currentPatientName
-          ? this.props.location.state.currentPatientName
-          : '';
+    if (get(this.props, 'location.state.currentPatientName')) {
+      currentPatientName = this.props.location.state.currentPatientName;
     } else {
-      currentPatientName =
-        this.props.location.state && this.props.location.state.currentPatientDetails
-          ? this.props.location.state.currentPatientDetails.fullName
-          : '';
+      currentPatientName = get(this.props, 'location.state.currentPatientDetails.fullName', '')
     }
-    const role = this.props.location.state ? this.props.location.state.role : '';
+    const role = get(this.props, 'location.state.role', '');
     const reportId = this.props.location.state ? this.props.location.state.reportId : '';
     // const loggedInUserId = this.props.location.state ? this.props.location.state.loggedInUserId : ''; THIS HAS BEEN TRANSFERRED TO STATE
     // const reportData = this.props.location.state ? this.props.location.state.report : {};
-    const { reportData, from } = this.state;
+    const { reportData, from, isSenderChange, createdByRole, value } = this.state;
 
     if (role === 'ROLE_DOCTOR' || role === 'ROLE_DIETICIAN') {
       sendToName = this.props.location.state.educatorName;
       assignedToTypeId = 2;
     } else if (role === 'ROLE_EDUCATOR') {
-      if (!this.state.isSenderChange) {
-        if (this.state && this.state.createdByRole && this.state.createdByRole === 'ROLE_DIETICIAN')
+      if (!isSenderChange) {
+        if (createdByRole === 'ROLE_DIETICIAN')
           assignedToTypeId = 2;
         else assignedToTypeId = 1;
       }
-      sendToName =
-        this.state.value === 'DOCTOR'
-          ? this.props.location.state.doctorName
-          : this.state.value === 'DIETITIAN'
-            ? this.props.location.state.dieticianName
+      sendToName = value === 'DOCTOR'
+          ? get(this.props, 'location.state.doctorName')
+          : value === 'DIETITIAN'
+            ? get(this.props, 'location.state.dieticianName')
             : '';
     }
     // This condition is to handle case for back redirection state setting for dietician and doctor checkbox
-    if (
-      this.props.location &&
-      this.props.location.state &&
-      this.props.location.state.assignedToTypeId
-    ) {
+    if (get(this.props, 'location.state.assignedToTypeId')) {
       assignedToTypeId = this.props.location.state.assignedToTypeId;
       sendToName = assignedToTypeId === 3 ? this.props.location.state.dieticianName : sendToName;
     }
@@ -2957,6 +2843,8 @@ class MedicationReport extends Component {
                     ? this.state.assignedToName
                     : sendToName}
                 </p>)}
+                  isOpen={this.state.modal}
+                  onToggle={this.toggle}
                 />
                 <CustomModal
                   textDirection={config.textDirection}
@@ -2982,6 +2870,8 @@ class MedicationReport extends Component {
                         </p>
                     </>
                   )}}
+                  isOpen={this.state.modal}
+                  onToggle={this.toggle}
                 />
                 <CustomModal
                   textDirection={config.textDirection}
@@ -3007,6 +2897,8 @@ class MedicationReport extends Component {
                         </p>
                     </>
                   )}}
+                  isOpen={this.state.modal}
+                  onToggle={this.toggle}
                 />
                 <CustomModal
                   textDirection={config.textDirection}
@@ -3028,6 +2920,8 @@ class MedicationReport extends Component {
                             )}
                         </p>
                   )}
+                  isOpen={this.state.modal}
+                  onToggle={this.toggle}
                 />
                 <CustomModal
                   textDirection={config.textDirection}
@@ -3043,6 +2937,8 @@ class MedicationReport extends Component {
                       : t('CHANGES_WILL_NOT_BE_SAVED_REPORT_DOCTOR', { name: sendToName })}
                   </p>
                   )}
+                  isOpen={this.state.modal}
+                  onToggle={this.toggle}
                 />
 
                 <hr />
